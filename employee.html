@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 70%;
+            margin: auto;
+            margin-top: 50px;
+            text-align: center;
+            
+        }
+        table th {
+            border: 1px solid rgb(0, 88, 139);
+            padding: 8px;
+            text-align: center;
+            background-color:rgb(0,88,139);
+        }
+        table td{
+            padding:8px;
+            text-align:center;
+            background-color:white;
+        }
+        h1{
+            text-align: center;
+            text-decoration:underline;
+            color:rgb(4, 78, 189);
+            font-family:'Courier New', Courier, monospace;
+            font-weight:bold;    
+        }
+        th{
+            color:white;
+        }
+        #S{
+            color:white;
+            background-color:rgb(32, 92, 204);
+            border:rgb(32, 92, 204);
+            height:25px;
+            width:235px;
+            border-radius: 10px;
+        }
+        #table{
+            margin-top:-340px;
+            margin-left:350px;
+            
+        }
+        #employeeForm{
+            
+            box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+            width:300px;
+            
+            
+            
+        }
+        .Box{
+            margin-left:350px;
+
+        }
+    </style>
+</head>
+<body>
+    <h1>MASAI EMPLOYEE RECORDS</h1>
+
+    <div>
+      <form id="employeeForm">
+        <label for="name">Employee Name</label><br />
+        <input id="name" type="text" placeholder="Enter Employee Name" /><br /><br>
+        <label for="employeeID">Employee ID</label><br />
+        <input id="employeeID" type="number" placeholder="Enter Employee ID" /><br /><br>
+        <label for="department">Department</label><br />
+        <select id="department">
+          <option value="">Select Department</option>
+          <option value="Frontend">Frontend</option>
+          <option value="Backend">Backend</option>
+          <option value="Operations">Operations</option>
+          <option value="HR">HR</option>
+          <option value="IA">IA</option>
+        </select><br /><br>
+        <label for="exp">Experience</label><br />
+        <input id="exp" type="number" placeholder="Experience in Years" /><br /><br>
+        <label for="email">Email Address</label><br />
+        <input type="text" id="email" placeholder="Enter Email Address" /><br /><br>
+        <label for="mbl">Mobile Number</label><br />
+        <input id="mbl" type="number" placeholder="Enter Mobile number" /><br /><br>
+        <input id="S" type="submit" value="Submit" />
+      </form>
+      <table id="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Employee ID</th>
+            <th>Department</th>
+            <th>Experience in years</th>
+            <th>Email address</th>
+            <th>Mobile Number</th>
+            <th>Role</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody id="employeeTable">
+          <!-- Append your output here -->
+        </tbody>
+      </table>
+      <div class="Box">
+        <label for="filterDepartment">Filter by Department:</label>
+      <select id="filterDepartmentSelect">
+        <option value="">All Departments</option>
+        <option value="Frontend">Frontend</option>
+        <option value="Backend">Backend</option>
+        <option value="Operations">Operations</option>
+        <option value="HR">HR</option>
+        <option value="IA">IA</option>
+      </div>
+      </select>
+    </div>
+
+    <script>
+        const employeeForm = document.getElementById("employeeForm");
+        const employeeTable = document.getElementById("employeeTable");
+        const filterDepartmentSelect = document.getElementById("filterDepartmentSelect");
+
+        employeeForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const employeeID = document.getElementById("employeeID").value;
+            const department = document.getElementById("department").value;
+            const experience = document.getElementById("exp").value;
+            const email = document.getElementById("email").value;
+            const mobile = document.getElementById("mbl").value;
+
+            if (name && employeeID && department && experience && email && mobile) {
+                const role = getRole(experience);
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td>${name}</td>
+                    <td>${employeeID}</td>
+                    <td>${department}</td>
+                    <td>${experience}</td>
+                    <td>${email}</td>
+                    <td>${mobile}</td>
+                    <td>${role}</td>
+                    <td><button class="deleteBtn">Delete</button></td>
+                `;
+
+                employeeTable.appendChild(newRow);
+
+                // Clear the form fields
+                employeeForm.reset();
+            }
+        });
+
+        function getRole(experience) {
+            if (experience > 5) {
+                return "Senior";
+            } else if (experience >= 2) {
+                return "Junior";
+            } else {
+                return "Fresher";
+            }
+        }
+
+        employeeTable.addEventListener("click", (e) => {
+            if (e.target.classList.contains("deleteBtn")) {
+                const row = e.target.parentElement.parentElement;
+                employeeTable.removeChild(row);
+            }
+        });
+
+        filterDepartmentSelect.addEventListener("change", () => {
+            const selectedDepartment = filterDepartmentSelect.value;
+            const rows = employeeTable.getElementsByTagName("tr");
+            for (const row of rows) {
+                if (selectedDepartment === "" || row.children[2].textContent === selectedDepartment) {
+                    row.style.display = "table-row";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
